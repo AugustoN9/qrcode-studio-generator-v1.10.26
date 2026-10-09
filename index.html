@@ -50,12 +50,13 @@
                 <form id="qrForm" onsubmit="return false;">
                   <!-- Título do Card (Opcional) -->
                   <div class="mb-3">
-                    <label for="titleInput" class="form-label small fw-semibold"
-                      >Título do Card
-                      <span class="text-muted fw-normal"
-                        >(Opcional)</span
-                      ></label
+                    <label
+                      for="titleInput"
+                      class="form-label small fw-semibold"
                     >
+                      Título do Card
+                      <span class="text-muted fw-normal">(Opcional)</span>
+                    </label>
                     <input
                       type="text"
                       class="form-control"
@@ -64,7 +65,7 @@
                     />
                   </div>
 
-                  <!-- Entrada do Link -->
+                  <!-- Entrada do Link (Inicia Vazio) -->
                   <div class="mb-3">
                     <label for="urlInput" class="form-label small fw-semibold"
                       >URL ou Texto</label
@@ -75,11 +76,11 @@
                       id="urlInput"
                       placeholder="https://seu-site.com"
                       required
-                      value="https://auguston9.github.io/UFCSPA-2-2026-ap"
+                      value=""
                     />
                   </div>
 
-                  <!-- Escolha de Formato e Resolução -->
+                  <!-- Escolha de Formato e Resolução (Inicia em Vertical HD 720x1280) -->
                   <div class="mb-3">
                     <label
                       for="formatSelect"
@@ -88,10 +89,10 @@
                     >
                     <select class="form-select" id="formatSelect">
                       <optgroup label="Vertical (Smartphone / Stories)">
-                        <option value="mobile_fhd" selected>
+                        <option value="mobile_fhd">
                           Vertical FHD (1080×1920)
                         </option>
-                        <option value="mobile_hd">
+                        <option value="mobile_hd" selected>
                           Vertical HD (720×1280)
                         </option>
                         <option value="mobile_50">
@@ -130,14 +131,13 @@
                     </select>
                   </div>
 
-                  <!-- Opção de Logomarca -->
+                  <!-- Opção de Logomarca (Inicia Desativado) -->
                   <div class="mb-3">
                     <div class="form-check form-switch mb-2">
                       <input
                         class="form-check-input"
                         type="checkbox"
                         id="enableLogoCheck"
-                        checked
                       />
                       <label
                         class="form-check-label small fw-semibold"
@@ -234,15 +234,28 @@
                     />
                   </div>
 
-                  <!-- Botão Principal para Gerar QR Code -->
-                  <button
-                    type="button"
-                    class="btn btn-success w-100 py-2 fw-semibold mb-4"
-                    id="generateBtn"
-                  >
-                    <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Gerar QR
-                    Code
-                  </button>
+                  <!-- Botões de Ação: Gerar e Limpar -->
+                  <div class="row g-2 mb-4">
+                    <div class="col-8">
+                      <button
+                        type="button"
+                        class="btn btn-success w-100 py-2 fw-semibold"
+                        id="generateBtn"
+                      >
+                        <i class="fa-solid fa-wand-magic-sparkles me-2"></i
+                        >Gerar QR Code
+                      </button>
+                    </div>
+                    <div class="col-4">
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary w-100 py-2 fw-semibold"
+                        id="clearBtn"
+                      >
+                        <i class="fa-solid fa-rotate-left me-1"></i>Limpar
+                      </button>
+                    </div>
+                  </div>
 
                   <hr class="my-4" />
 

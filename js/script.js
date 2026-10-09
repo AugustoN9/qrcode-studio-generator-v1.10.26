@@ -16,13 +16,14 @@ const gradientGroup = document.getElementById('gradientGroup');
 const qrColorInput = document.getElementById('qrColorInput');
 const radiusInput = document.getElementById('radiusInput');
 const generateBtn = document.getElementById('generateBtn');
+const clearBtn = document.getElementById('clearBtn');
 const exportFormatSelect = document.getElementById('exportFormatSelect');
 const qualityInput = document.getElementById('qualityInput');
 const qualityVal = document.getElementById('qualityVal');
 const qualityContainer = document.getElementById('qualityContainer');
 const downloadBtn = document.getElementById('downloadBtn');
 
-// Mapeamento das Resoluções
+// Mapeamento das Resoluções (Largura x Altura)
 const RESOLUTION_MAP = {
   'mobile_fhd': { width: 1080, height: 1920, type: 'vertical' },
   'mobile_hd': { width: 720, height: 1280, type: 'vertical' },
@@ -40,8 +41,9 @@ const RESOLUTION_MAP = {
   'square_low': { width: 240, height: 240, type: 'square' }
 };
 
-// Eventos
+// Eventos Principais
 generateBtn.addEventListener('click', renderCard);
+clearBtn.addEventListener('click', resetForm);
 
 bgTypeSelect.addEventListener('change', () => {
   if (bgTypeSelect.value === 'gradient') {
@@ -65,6 +67,7 @@ exportFormatSelect.addEventListener('change', () => {
   }
 });
 
+// Leitura do arquivo da Logomarca
 logoInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (file) {
@@ -84,6 +87,9 @@ logoInput.addEventListener('change', (e) => {
   }
 });
 
+/**
+ * Função para gerar a matriz booleana usando qrcode-generator
+ */
 function getQRMatrix(text) {
   try {
     const qr = qrcode(0, 'H');
@@ -107,12 +113,12 @@ function getQRMatrix(text) {
   }
 }
 
-// Renderização no Canvas
+// Renderização principal do Canvas
 function renderCard() {
   const text = urlInput.value.trim() || 'https://google.com';
   const titleText = titleInput.value.trim();
   const selectedFormatKey = formatSelect.value;
-  const config = RESOLUTION_MAP[selectedFormatKey] || RESOLUTION_MAP['mobile_fhd'];
+  const config = RESOLUTION_MAP[selectedFormatKey] || RESOLUTION_MAP['mobile_hd'];
 
   const showLogo = enableLogoCheck.checked;
   const bgColor1 = bgColorInput.value;
@@ -121,10 +127,11 @@ function renderCard() {
   const bgType = bgTypeSelect.value;
   const borderRadiusPercent = parseInt(radiusInput.value) / 100;
 
+  // 1. Redimensionar Canvas
   canvas.width = config.width;
   canvas.height = config.height;
 
-  // 1. Fundo
+  // 2. Pintar Fundo
   if (bgType === 'gradient') {
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
     gradient.addColorStop(0, bgColor1);
@@ -135,7 +142,7 @@ function renderCard() {
   }
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // 2. Título do Card (se preenchido)
+  // 3. Título do Card (se preenchido)
   if (titleText) {
     const titleFontSize = Math.max(18, Math.round(canvas.width * 0.045));
     ctx.font = `700 ${titleFontSize}px 'Inter', sans-serif`;
@@ -146,12 +153,13 @@ function renderCard() {
     ctx.fillText(titleText, canvas.width / 2, titleY);
   }
 
-  // 3. Matriz QR
+  // 4. Matriz do QR Code
   const qrData = getQRMatrix(text);
   if (!qrData) return;
 
   const { count: moduleCount, matrix } = qrData;
 
+  // Posições proporcionais
   let qrSize, qrX, qrY;
   if (config.type === 'vertical') {
     qrSize = config.width * 0.60;
@@ -197,7 +205,7 @@ function renderCard() {
     }
   }
 
-  // 4. Logomarca
+  // 5. Logomarca
   if (showLogo && currentLogoImg) {
     if (config.type === 'vertical') {
       const logoSize = config.width * 0.18;
@@ -242,7 +250,7 @@ function renderCard() {
     }
   }
 
-  // 5. Desenhar Assinatura/Rodapé
+  // 6. Rodapé/Assinatura na imagem
   const footerText = "Desenvolvido por @AugustoN9 - 2026 - 8.10";
   const fontSize = Math.max(14, Math.round(canvas.width * 0.025));
   
@@ -256,7 +264,31 @@ function renderCard() {
   ctx.globalAlpha = 1.0;
 }
 
-// Handler de Download + Limpeza do Input de URL
+// Função para Limpar/Resetar Formulário
+function resetForm() {
+  titleInput.value = '';
+  urlInput.value = '';
+  logoInput.value = '';
+  currentLogoImg = null;
+
+  formatSelect.value = 'mobile_hd';
+  enableLogoCheck.checked = false;
+  bgTypeSelect.value = 'gradient';
+  gradientGroup.classList.remove('d-none');
+  
+  bgColorInput.value = '#1e1e2f';
+  bgColorInput2.value = '#4e54c8';
+  qrColorInput.value = '#ffffff';
+  radiusInput.value = '30';
+
+  exportFormatSelect.value = 'image/webp';
+  qualityInput.value = '100';
+  qualityVal.textContent = '100%';
+
+  renderCard();
+}
+
+// Evento de Download + Limpeza do Input de URL
 downloadBtn.addEventListener('click', () => {
   renderCard();
 
@@ -277,16 +309,16 @@ downloadBtn.addEventListener('click', () => {
     link.click();
   }
 
-  // Limpa o campo de URL após o disparo do download
+  // Limpa a URL após o download
   urlInput.value = '';
 });
 
-// Exportar SVG com Título e Rodapé
+// Exportação SVG
 function exportAsSVG(filename) {
   const text = urlInput.value.trim() || 'https://google.com';
   const titleText = titleInput.value.trim();
   const selectedFormatKey = formatSelect.value;
-  const config = RESOLUTION_MAP[selectedFormatKey] || RESOLUTION_MAP['mobile_fhd'];
+  const config = RESOLUTION_MAP[selectedFormatKey] || RESOLUTION_MAP['mobile_hd'];
 
   const showLogo = enableLogoCheck.checked;
   const bgColor1 = bgColorInput.value;
@@ -323,7 +355,6 @@ function exportAsSVG(filename) {
 
   let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">\n`;
   
-  // Fundo
   if (bgType === 'gradient') {
     svgContent += `  <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -336,14 +367,12 @@ function exportAsSVG(filename) {
     svgContent += `  <rect width="${width}" height="${height}" fill="${bgColor1}" />\n`;
   }
 
-  // Título
   if (titleText) {
     const titleFontSize = Math.max(18, Math.round(width * 0.045));
     const titleY = config.type === 'vertical' ? height * 0.09 : height * 0.12;
     svgContent += `  <text x="${width / 2}" y="${titleY}" font-family="'Inter', sans-serif" font-size="${titleFontSize}" font-weight="700" fill="${qrColor}" text-anchor="middle">${titleText}</text>\n`;
   }
 
-  // Módulos
   svgContent += `  <g fill="${qrColor}">\n`;
 
   for (let row = 0; row < moduleCount; row++) {
@@ -365,7 +394,6 @@ function exportAsSVG(filename) {
   }
   svgContent += `  </g>\n`;
 
-  // Logomarca
   if (showLogo && currentLogoImg) {
     const logoBase64 = currentLogoImg.src;
 
@@ -408,7 +436,6 @@ function exportAsSVG(filename) {
     }
   }
 
-  // Rodapé
   const footerText = "Desenvolvido por @AugustoN9 - 2026 - 8.10";
   const fontSize = Math.max(14, Math.round(width * 0.025));
   const footerY = height - (height * 0.04);
@@ -428,4 +455,5 @@ function exportAsSVG(filename) {
   URL.revokeObjectURL(url);
 }
 
+// Renderização Inicial
 window.onload = renderCard;
