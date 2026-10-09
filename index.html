@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Studio - Gerador Pro de QR Code</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome Ícones -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Estilos Customizados Local -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <!-- Cabeçalho -->
+          <div class="text-center mb-5">
+            <h1 class="fw-bold">
+              <i class="fa-solid fa-qrcode text-primary me-2"></i>QR Studio
+            </h1>
+            <p class="text-muted">
+              Crie QR Codes estilizados para impressão e redes sociais em
+              segundos.
+            </p>
+          </div>
+
+          <div class="row g-4">
+            <!-- Painel de Controles -->
+            <div class="col-md-5">
+              <div class="card card-custom p-4 bg-white">
+                <h5 class="fw-bold mb-3">
+                  <i class="fa-solid fa-sliders me-2"></i>Configurações
+                </h5>
+
+                <form id="qrForm" onsubmit="return false;">
+                  <!-- Título do Card (Opcional) -->
+                  <div class="mb-3">
+                    <label for="titleInput" class="form-label small fw-semibold"
+                      >Título do Card
+                      <span class="text-muted fw-normal"
+                        >(Opcional)</span
+                      ></label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="titleInput"
+                      placeholder="Ex: Escaneie para acessar o Menu"
+                    />
+                  </div>
+
+                  <!-- Entrada do Link -->
+                  <div class="mb-3">
+                    <label for="urlInput" class="form-label small fw-semibold"
+                      >URL ou Texto</label
+                    >
+                    <input
+                      type="url"
+                      class="form-control"
+                      id="urlInput"
+                      placeholder="https://seu-site.com"
+                      required
+                      value="https://auguston9.github.io/UFCSPA-2-2026-ap"
+                    />
+                  </div>
+
+                  <!-- Escolha de Formato e Resolução -->
+                  <div class="mb-3">
+                    <label
+                      for="formatSelect"
+                      class="form-label small fw-semibold"
+                      >Formato e Resolução do Card</label
+                    >
+                    <select class="form-select" id="formatSelect">
+                      <optgroup label="Vertical (Smartphone / Stories)">
+                        <option value="mobile_fhd" selected>
+                          Vertical FHD (1080×1920)
+                        </option>
+                        <option value="mobile_hd">
+                          Vertical HD (720×1280)
+                        </option>
+                        <option value="mobile_50">
+                          Vertical 50% HD (360×640)
+                        </option>
+                        <option value="mobile_low">
+                          Vertical Baixa Res. (240×426)
+                        </option>
+                      </optgroup>
+                      <optgroup label="Horizontal (Banner / Apresentação)">
+                        <option value="landscape_fhd">
+                          Horizontal FHD (1920×1080)
+                        </option>
+                        <option value="landscape_hd">
+                          Horizontal HD (1280×720)
+                        </option>
+                        <option value="landscape_50">
+                          Horizontal 50% HD (640×360)
+                        </option>
+                        <option value="landscape_low">
+                          Horizontal Baixa Res. (426×240)
+                        </option>
+                      </optgroup>
+                      <optgroup label="Quadrado (Social / Post)">
+                        <option value="square_fhd">
+                          Quadrado FHD (1080×1080)
+                        </option>
+                        <option value="square_hd">Quadrado HD (720×720)</option>
+                        <option value="square_50">
+                          Quadrado 50% HD (360×360)
+                        </option>
+                        <option value="square_low">
+                          Quadrado Baixa Res. (240×240)
+                        </option>
+                      </optgroup>
+                    </select>
+                  </div>
+
+                  <!-- Opção de Logomarca -->
+                  <div class="mb-3">
+                    <div class="form-check form-switch mb-2">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="enableLogoCheck"
+                        checked
+                      />
+                      <label
+                        class="form-check-label small fw-semibold"
+                        for="enableLogoCheck"
+                        >Incluir Logomarca</label
+                      >
+                    </div>
+                    <input
+                      type="file"
+                      class="form-control form-control-sm"
+                      id="logoInput"
+                      accept="image/*"
+                    />
+                  </div>
+
+                  <!-- Estilo do Fundo -->
+                  <div class="mb-3">
+                    <label
+                      for="bgTypeSelect"
+                      class="form-label small fw-semibold"
+                      >Estilo do Fundo</label
+                    >
+                    <select
+                      class="form-select form-select-sm"
+                      id="bgTypeSelect"
+                    >
+                      <option value="solid">Cor Sólida</option>
+                      <option value="gradient" selected>
+                        Gradiente Moderno
+                      </option>
+                    </select>
+                  </div>
+
+                  <!-- Cores de Fundo -->
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <label
+                        for="bgColorInput"
+                        class="form-label small fw-semibold"
+                        >Cor de Fundo / Inicial</label
+                      >
+                      <input
+                        type="color"
+                        class="form-control form-control-color w-100"
+                        id="bgColorInput"
+                        value="#1e1e2f"
+                      />
+                    </div>
+                    <div class="col-6" id="gradientGroup">
+                      <label
+                        for="bgColorInput2"
+                        class="form-label small fw-semibold"
+                        >Cor Final (Gradiente)</label
+                      >
+                      <input
+                        type="color"
+                        class="form-control form-control-color w-100"
+                        id="bgColorInput2"
+                        value="#4e54c8"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Cor do QR Code e Arredondamento -->
+                  <div class="row g-2 mb-3">
+                    <div class="col-12">
+                      <label
+                        for="qrColorInput"
+                        class="form-label small fw-semibold"
+                        >Cor do QR Code</label
+                      >
+                      <input
+                        type="color"
+                        class="form-control form-control-color w-100"
+                        id="qrColorInput"
+                        value="#ffffff"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      for="radiusInput"
+                      class="form-label small fw-semibold"
+                      >Arredondamento dos Módulos</label
+                    >
+                    <input
+                      type="range"
+                      class="form-range"
+                      id="radiusInput"
+                      min="0"
+                      max="50"
+                      value="30"
+                    />
+                  </div>
+
+                  <!-- Botão Principal para Gerar QR Code -->
+                  <button
+                    type="button"
+                    class="btn btn-success w-100 py-2 fw-semibold mb-4"
+                    id="generateBtn"
+                  >
+                    <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Gerar QR
+                    Code
+                  </button>
+
+                  <hr class="my-4" />
+
+                  <!-- Opções de Exportação -->
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <label
+                        for="exportFormatSelect"
+                        class="form-label small fw-semibold"
+                        >Formato do Arquivo</label
+                      >
+                      <select
+                        class="form-select form-select-sm"
+                        id="exportFormatSelect"
+                      >
+                        <option value="image/png">PNG</option>
+                        <option value="image/webp" selected>WEBP</option>
+                        <option value="image/svg+xml">SVG (Vetor)</option>
+                      </select>
+                    </div>
+                    <div class="col-6" id="qualityContainer">
+                      <label
+                        for="qualityInput"
+                        class="form-label small fw-semibold"
+                        >Qualidade: <span id="qualityVal">100%</span></label
+                      >
+                      <input
+                        type="range"
+                        class="form-range"
+                        id="qualityInput"
+                        min="10"
+                        max="100"
+                        value="100"
+                        step="5"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Botão de Download -->
+                  <button
+                    type="button"
+                    class="btn btn-primary w-100 py-2 fw-semibold"
+                    id="downloadBtn"
+                  >
+                    <i class="fa-solid fa-download me-2"></i>Baixar Imagem
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Painel de Preview -->
+            <div class="col-md-7">
+              <div
+                class="card card-custom p-4 bg-white h-100 d-flex flex-column justify-content-between"
+              >
+                <h5 class="fw-bold mb-3">
+                  <i class="fa-solid fa-eye me-2"></i>Pré-visualização
+                </h5>
+
+                <div class="preview-container">
+                  <canvas id="mainCanvas"></canvas>
+                </div>
+
+                <p class="text-center text-muted small mt-3 mb-0">
+                  Visualização gerada em alta definição.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rodapé da Aplicação -->
+    <footer class="text-center py-4 text-muted small">
+      Desenvolvido por <strong>@AugustoN9</strong> - 2026 - 8.10
+    </footer>
+
+    <!-- Biblioteca JS do QR Code (Gerador Síncrono da Matriz) -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+
+    <!-- Script Local -->
+    <script src="js/script.js"></script>
+  </body>
+</html>

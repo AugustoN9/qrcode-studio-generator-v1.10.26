@@ -1,0 +1,37 @@
+/* Estilos Customizados do QR Studio */
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.card-custom {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.preview-container {
+  background-color: #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 450px;
+}
+
+/* Garante que a imagem do canvas seja totalmente responsiva no preview */
+canvas {
+  max-width: 100%;
+  max-height: 550px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Esconde a div temporária de processamento */
+#temp-qrcode {
+  display: none;
+}
